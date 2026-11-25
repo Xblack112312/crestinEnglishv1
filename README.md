@@ -1,5 +1,24 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Content management and video setup
+
+Course content is stored as one `Content` document per course (modules and lessons
+are embedded) and published content is an immutable `CourseRelease` snapshot.
+All content-management mutations use POST; read endpoints use GET.
+
+Configure the server-only Mux variables in `.env.example`. `MUX_TOKEN_ID` and
+`MUX_TOKEN_SECRET` authorize server calls, `MUX_SIGNING_KEY_ID` and
+`MUX_SIGNING_PRIVATE_KEY` create short-lived signed-playback tokens, and
+`MUX_WEBHOOK_SECRET` verifies `POST /api/webhooks/mux`. Configure that URL in
+Mux. `APP_ORIGIN` must match the browser origin used for Direct Upload CORS.
+
+Videos are uploaded directly from the admin browser to Mux; the application
+server never receives the media bytes. Videos use signed playback IDs only.
+Mux generated captions/transcripts are enabled for English assets and are
+stored with timestamped segments when Mux reports the generated track ready.
+Arabic transcription needs a separate Arabic-capable transcription provider;
+it is intentionally not faked by this implementation.
+
 ## Getting Started
 
 First, run the development server:
